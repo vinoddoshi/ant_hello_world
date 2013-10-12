@@ -1,15 +1,35 @@
 <?xml version="1.0" ?> 
 <project name="AntExample1" default="" basedir=".">
+	
+	<property file="build.properties" />
+	
 	<path id="classpath.test">
-		<pathelement path="/home/vinod_doshi/Projects/testng/testng-6.8/testng-6.8.jar"/>
+		<!-- <pathelement path="/home/vinod_doshi/Projects/testng/testng-6.8/testng-6.8.jar"/> -->
+		<pathelement location="/home/vinod_doshi/Projects/testng/testng-6.8/testng-6.8.jar"/>
 		<pathelement location="/home/vinod_doshi/workspace/TestNgTesting/build/classes"/>
+		<fileset dir="/home/vinod_doshi/Projects/cobertura-2.0.3">
+					<include name="cobertura*.jar" />
+					<include name="lib/**/*.jar" />
+		</fileset>
 	</path>
 
-	<taskdef name="testng" classname="org.testng.TestNGAntTask">
+	<path id="cobertura.classpath">
+		<fileset dir="${cobertura.dir}">
+			<include name="cobertura*.jar" />
+			<include name="lib/**/*.jar" />
+		</fileset>
+	</path>
+				
+	<!-- <taskdef classpathref="cobertura.classpath" resource="tasks.properties"/> -->
+	
+	<taskdef name="testng" classpathref="classpath.test" classname="org.testng.TestNGAntTask">
 	        <classpath>
 	        	<pathelement path="/home/vinod_doshi/Projects/testng/testng-6.8/testng-6.8.jar"/>
 	        </classpath>
 	 </taskdef>
+	
+	 <taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
+
 	
 	<target name="init">
 		<mkdir dir="build/classes"/>
@@ -36,10 +56,63 @@
 		</testng>
 	 </target> -->
 	
+	<target name="instrument" depends="init,compile">
+			<!--
+				Remove the coverage data file and any old instrumentation.
+			-->
+			<delete file="cobertura.ser"/>
+			<delete dir="${instrumented.dir}" />
+
+			<!--
+				Instrument the application classes, writing the
+				instrumented classes into ${build.instrumented.dir}.
+			-->
+			<cobertura-instrument todir="${instrumented.dir}">
+				<!--
+					The following line causes instrument to ignore any
+					source line containing a reference to log4j, for the
+					purposes of coverage reporting.
+				-->
+				<ignore regex="org.apache.log4j.*" />
+
+				<fileset dir="${classes.dir}">
+					<!--
+						Instrument all the application classes, but
+						don't instrument the test classes.
+					-->
+					<include name="**/*.class" />
+					<exclude name="**/*Test.class" />
+				</fileset>
+			</cobertura-instrument>
+		</target>
+	
 	<target name="runTest" depends="compile">
-			<testng classpathref="classpath.test">
+			<testng>
+				<classpath location="${classes.dir}" />
 				<xmlfileset dir="." includes="testng.xml"/>
 			</testng>
+	</target>
+	
+	<target name="runTestInstrumented" depends="compile">
+			<!-- <testng classpathref="classpath.test">
+				<xmlfileset dir="." includes="testng.xml"/>
+			</testng> -->
+		<testng>
+			<classpath location="${instrumented.dir}" />
+			<classpath location="${classes.dir}" />
+			<classpath refid="cobertura.classpath" />
+			<xmlfileset dir="." includes="testng.xml"/>
+		</testng>
+	</target>
+
+	<target name="xml_report" depends="runTestInstrumented">
+	   <cobertura-report format="xml"
+	                     destdir="${coverage.xml.dir}"
+	                     maxmemory="512M">
+	      <fileset dir="${source.dir}">
+	         <include name="**/*.java" />
+	      </fileset>
+	   </cobertura-report>
 	</target>
 	
 </project>
