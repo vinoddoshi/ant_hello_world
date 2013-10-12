@@ -7,7 +7,7 @@ public class HelloWorld {
 	@Test public void testMe()
 	{
 		//return true;
-		Assert.assertTrue(true);
+		Assert.assertTrue(false);
 	}
 	
     public static void main(String args[])
