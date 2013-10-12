@@ -1,0 +1,45 @@
+<?xml version="1.0" ?> 
+<project name="AntExample1" default="" basedir=".">
+	<path id="classpath.test">
+		<pathelement path="/home/vinod_doshi/Projects/testng/testng-6.8/testng-6.8.jar"/>
+		<pathelement location="/home/vinod_doshi/workspace/TestNgTesting/build/classes"/>
+	</path>
+
+	<taskdef name="testng" classname="org.testng.TestNGAntTask">
+	        <classpath>
+	        	<pathelement path="/home/vinod_doshi/Projects/testng/testng-6.8/testng-6.8.jar"/>
+	        </classpath>
+	 </taskdef>
+	
+	<target name="init">
+		<mkdir dir="build/classes"/>
+		<mkdir dir="dist" />
+	</target>
+	
+	<target name="compile" depends="init" >
+		<javac destdir="build/classes" srcdir="src">
+			<classpath refid="classpath.test"/>
+		</javac>
+
+	</target>
+	
+		
+	<target name="clean">
+		<delete dir="dist" />
+		<delete dir="build" />
+	</target>
+	
+	<!-- <target name="runTest" depends="compile">
+		<testng classname="org.testng.TestNGAntTask">
+			<classpath refid="classpath.test"/>
+			<xmlfileset includes="testng.xml"/>
+		</testng>
+	 </target> -->
+	
+	<target name="runTest" depends="compile">
+			<testng classpathref="classpath.test">
+				<xmlfileset dir="." includes="testng.xml"/>
+			</testng>
+	</target>
+	
+</project>
