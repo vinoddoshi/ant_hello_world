@@ -93,7 +93,7 @@
 			</testng>
 	</target>
 	
-	<target name="runTestInstrumented" depends="compile">
+	<target name="runTestInstrumented" depends="instrument">
 			<!-- <testng classpathref="classpath.test">
 				<xmlfileset dir="." includes="testng.xml"/>
 			</testng> -->
