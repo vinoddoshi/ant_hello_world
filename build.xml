@@ -5,9 +5,9 @@
 	
 	<path id="classpath.test">
 		<!-- <pathelement path="/home/vinod_doshi/Projects/testng/testng-6.8/testng-6.8.jar"/> -->
-		<pathelement location="/home/vinod_doshi/Projects/testng/testng-6.8/testng-6.8.jar"/>
-		<pathelement location="/home/vinod_doshi/workspace/TestNgTesting/build/classes"/>
-		<fileset dir="/home/vinod_doshi/Projects/cobertura-2.0.3">
+		<pathelement location="testng-6.8/testng-6.8.jar"/>
+		<pathelement location="build/classes"/>
+		<fileset dir="cobertura-2.0.3">
 					<include name="cobertura*.jar" />
 					<include name="lib/**/*.jar" />
 		</fileset>
@@ -24,7 +24,7 @@
 	
 	<taskdef name="testng" classpathref="classpath.test" classname="org.testng.TestNGAntTask">
 	        <classpath>
-	        	<pathelement path="/home/vinod_doshi/Projects/testng/testng-6.8/testng-6.8.jar"/>
+	        	<pathelement path="testng-6.8/testng-6.8.jar"/>
 	        </classpath>
 	 </taskdef>
 	
