@@ -3,9 +3,9 @@
 <suite name="Suite1" verbose="2" >
   <test name="Test1" >
     <classes>
-       <class name="HelloWorld">
+       <class name="HelloWorldTest">
        <methods>
-					<include name="testMe" />
+					<include name="test1" />
 		</methods>			
     	</class>
     </classes>
