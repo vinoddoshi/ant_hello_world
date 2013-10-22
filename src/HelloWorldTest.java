@@ -10,7 +10,7 @@ public class HelloWorldTest {
 		//return true;
 		HelloWorld hw = new HelloWorld();
 		//hw.testMe();
-		Assert.assertTrue(9==hw.sum());
+		Assert.assertTrue(8==hw.sum());
 	}
 	
     public static void main(String args[])
